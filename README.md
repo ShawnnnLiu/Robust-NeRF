@@ -20,8 +20,6 @@ This repository currently provides **structure and utilities only**. The actual 
   - **`raw/`**: Raw NeRF Blender assets (e.g., images and `transforms*.json`).
   - **`processed/`**: Any preprocessed or cached data (rays, feature tensors, etc.).
 - **`scripts/`**
-  - **`download_blender_dataset.py`**: Helper script to download and extract the NeRF Synthetic Blender lego scene.
-  - **`visualize_dataset.py`**: Script to quickly inspect images and visualize camera poses in 3D.
   - **`inject_noise.py`**: Simple Gaussian-noise utilities for intrinsics and extrinsics (for experimentation and prototyping).
 - **`src/`**
   - **`camera/`**
@@ -52,7 +50,33 @@ For each scene, the dataset typically provides:
   - A JSON file (e.g., `transforms.json` or `transforms_train.json`) containing **camera-to-world** transform matrices.
   - Approximate **field-of-view (FOV)** information.
 
-The helper script in `scripts/download_blender_dataset.py` is set up to download a **ZIP archive** of the lego scene into `data/raw/lego/`, but you will need to set a working **direct download URL** for the dataset.
+You can download the official NeRF synthetic data bundle (which includes `lego`) from:
+
+- **Google Drive (NeRF data)**: `https://drive.google.com/drive/folders/1cK3UDIJqKAAm7zyrxRYVFJ0BRMgrwhh4`
+
+Download **`nerf_synthetic.zip`** from that folder and unzip it into `data/raw/`, so you end up with a structure like:
+
+```text
+data/raw/nerf_synthetic/
+  lego/
+    train/
+    val/
+    test/
+    transforms_train.json
+    transforms_val.json
+    transforms_test.json
+  chair/
+  drums/
+  ...
+```
+
+For convenience, you can create a symlink so the project can always refer to `data/raw/lego`:
+
+```bash
+cd data/raw
+ln -s nerf_synthetic/lego lego
+cd ../..
+```
 
 ---
 
@@ -69,43 +93,31 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-#### 2. Download the lego dataset
+#### 2. Download and unpack the NeRF synthetic dataset
 
-Update the `DATASET_URL` constant inside `scripts/download_blender_dataset.py` to point to a **direct ZIP download** of the NeRF Blender lego scene (containing images and `transforms*.json`).
+1. Go to the NeRF data Google Drive folder:  
+   `https://drive.google.com/drive/folders/1cK3UDIJqKAAm7zyrxRYVFJ0BRMgrwhh4`
+2. Download **`nerf_synthetic.zip`**.
+3. From the repository root, create the data directory (if needed) and unzip:
 
-Then run:
+   ```bash
+   mkdir -p data/raw
+   unzip /path/to/nerf_synthetic.zip -d data/raw
+   ```
 
-```bash
-python scripts/download_blender_dataset.py
-```
+4. (Optional but recommended) Create a symlink for the lego scene:
 
-By default this will extract the dataset under:
+   ```bash
+   cd data/raw
+   ln -s nerf_synthetic/lego lego
+   cd ../..
+   ```
 
-- **`data/raw/lego/`**
-
-If you already have the dataset downloaded manually, you can simply place it under `data/raw/lego/` with:
-
-- images under `data/raw/lego/` or `data/raw/lego/train/`
-- JSON transforms file (e.g., `transforms.json` or `transforms_train.json`) in `data/raw/lego/`
-
----
-
-### Running the Visualization Script
-
-To quickly sanity-check that the dataset is in the expected format, you can run:
-
-```bash
-python scripts/visualize_dataset.py
-```
-
-This will:
-
-- Display a few sample images from the lego scene.
-- Plot camera centers in 3D using the transform matrices from `transforms.json` or `transforms_train.json`.
+After this, the notebooks will expect to find the lego scene at `data/raw/lego/`.
 
 ---
 
-### Using the Notebooks
+### Visualizing the Dataset (Notebooks)
 
 Start Jupyter from the repository root:
 
@@ -116,8 +128,8 @@ jupyter notebook
 Then open:
 
 - **`notebooks/explore_data.ipynb`**
-  - Inspect sample RGB frames.
-  - Visualize the distribution of camera poses.
+  - Displays a few sample RGB frames from the lego scene.
+  - Visualizes the distribution of camera poses in 3D.
 - **`notebooks/visualize_noise_effects.ipynb`**
   - Load camera transforms.
   - Apply simple Gaussian noise to extrinsics.
