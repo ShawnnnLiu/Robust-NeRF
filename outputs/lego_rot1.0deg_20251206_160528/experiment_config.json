@@ -1,0 +1,14 @@
+{
+  "scene": "lego",
+  "experiment_name": "lego_rot1.0deg_20251206_160528",
+  "noise_config": {
+    "rotation_noise_deg": 1.0,
+    "translation_noise": 0.0,
+    "seed": null,
+    "has_noise": true
+  },
+  "num_iterations": 10000,
+  "batch_size": 1024,
+  "img_scale": 0.5,
+  "timestamp": "2025-12-06T16:05:35.892168"
+}

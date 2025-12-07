@@ -70,13 +70,17 @@ data/raw/nerf_synthetic/
   ...
 ```
 
-For convenience, you can create a symlink so the project can always refer to `data/raw/lego`:
+**Note:** The notebooks and training scripts will automatically look for data in `data/raw/nerf_synthetic/lego/` by default.
+
+For convenience, you can optionally create a symlink so the project can also refer to `data/raw/lego`:
 
 ```bash
 cd data/raw
 ln -s nerf_synthetic/lego lego
 cd ../..
 ```
+
+The code has fallback logic to check both locations automatically.
 
 ---
 
@@ -105,7 +109,7 @@ pip install -r requirements.txt
    unzip /path/to/nerf_synthetic.zip -d data/raw
    ```
 
-4. (Optional but recommended) Create a symlink for the lego scene:
+4. (Optional) Create a symlink for the lego scene:
 
    ```bash
    cd data/raw
@@ -113,7 +117,7 @@ pip install -r requirements.txt
    cd ../..
    ```
 
-After this, the notebooks will expect to find the lego scene at `data/raw/lego/`.
+The notebooks and scripts will look for the lego scene in `data/raw/nerf_synthetic/lego/` by default, but they also have fallback logic to check `data/raw/lego/` if the symlink is created.
 
 ---
 

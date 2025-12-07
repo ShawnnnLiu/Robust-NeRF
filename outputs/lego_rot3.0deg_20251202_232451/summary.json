@@ -1,0 +1,57 @@
+{
+  "experiment_name": "lego_rot3.0deg_20251202_232451",
+  "start_time": "2025-12-02T23:24:51.891055",
+  "output_dir": "outputs\\lego_rot3.0deg_20251202_232451",
+  "config": {
+    "model": {
+      "pos_freqs": 10,
+      "dir_freqs": 4,
+      "hidden_dim": 256,
+      "num_hidden_layers": 8,
+      "skips": [
+        4
+      ],
+      "use_view_dirs": true
+    },
+    "render": {
+      "near": 2.0,
+      "far": 6.0,
+      "num_samples": 64,
+      "num_samples_fine": 128,
+      "use_hierarchical": true,
+      "perturb": true,
+      "raw_noise_std": 0.0,
+      "white_background": true
+    },
+    "data": {
+      "scene_name": "lego",
+      "data_root": null,
+      "img_scale": 0.5,
+      "batch_size": 1024,
+      "shuffle": true
+    },
+    "train": {
+      "lr": 0.0005,
+      "lr_decay": 250,
+      "num_iterations": 10000,
+      "log_every": 100,
+      "save_every": 10000,
+      "val_every": 5000,
+      "output_dir": "outputs",
+      "experiment_name": "auto",
+      "device": "cuda",
+      "seed": 42
+    }
+  },
+  "model_coarse_total_params": 595844,
+  "model_coarse_trainable_params": 595844,
+  "model_fine_total_params": 595844,
+  "model_fine_trainable_params": 595844,
+  "end_time": "2025-12-02T23:56:42.077128",
+  "total_time_seconds": 1910.186072587967,
+  "total_iterations": 10000,
+  "final_val_psnr": 16.57183074951172,
+  "final_val_ssim": 0.705078918337822,
+  "best_val_psnr": 16.78704261779785,
+  "best_val_ssim": 0.7224495649337769
+}
