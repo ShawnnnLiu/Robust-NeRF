@@ -1,0 +1,15 @@
+{
+  "scene": "lego",
+  "experiment_name": "lego_trans3.0pct_20251206_215351",
+  "noise_config": {
+    "rotation_noise_deg": 0.0,
+    "translation_noise": 0.0,
+    "translation_noise_pct": 3.0,
+    "seed": null,
+    "has_noise": true
+  },
+  "num_iterations": 10000,
+  "batch_size": 1024,
+  "img_scale": 0.5,
+  "timestamp": "2025-12-06T21:53:58.403208"
+}

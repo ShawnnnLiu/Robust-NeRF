@@ -1,0 +1,15 @@
+{
+  "scene": "lego",
+  "experiment_name": "lego_clean_20251206_210328",
+  "noise_config": {
+    "rotation_noise_deg": 0,
+    "translation_noise": 0,
+    "translation_noise_pct": 0,
+    "seed": null,
+    "has_noise": false
+  },
+  "num_iterations": 10000,
+  "batch_size": 1024,
+  "img_scale": 0.5,
+  "timestamp": "2025-12-06T21:03:35.139428"
+}
