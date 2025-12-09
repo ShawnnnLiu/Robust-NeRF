@@ -84,6 +84,30 @@ class TrainConfig:
 
 
 @dataclass
+class PoseOptConfig:
+    """Configuration for camera pose optimization."""
+    
+    # Whether to optimize poses
+    enabled: bool = True
+    
+    # What to optimize
+    learn_rotation: bool = True
+    learn_translation: bool = True
+    
+    # Optimization settings
+    pose_lr: float = 1e-4
+    pose_opt_delay: int = 1000  # Start optimizing after N iterations
+    
+    # Initialization mode
+    init_mode: str = "noisy"  # "clean" or "noisy"
+    
+    # Noise for initialization (if init_mode == "noisy")
+    rotation_noise_deg: float = 0.0
+    translation_noise_pct: float = 0.0
+    noise_seed: Optional[int] = None
+
+
+@dataclass
 class NeRFConfig:
     """Complete configuration for NeRF training."""
     
@@ -91,6 +115,7 @@ class NeRFConfig:
     render: RenderConfig = field(default_factory=RenderConfig)
     data: DataConfig = field(default_factory=DataConfig)
     train: TrainConfig = field(default_factory=TrainConfig)
+    pose_opt: Optional[PoseOptConfig] = None  # Optional pose optimization
     
     def __post_init__(self):
         # Convert paths
@@ -98,6 +123,7 @@ class NeRFConfig:
             self.train.output_dir = Path(self.train.output_dir)
         if isinstance(self.data.data_root, str):
             self.data.data_root = Path(self.data.data_root)
+
 
 
 

@@ -1,0 +1,17 @@
+{
+  "scene": "lego",
+  "experiment_name": "lego_poseopt_cleaninit_clean_20251207_205248",
+  "init_mode": "clean",
+  "pose_optimization": {
+    "learn_rotation": true,
+    "learn_translation": true,
+    "pose_lr": 0.0001,
+    "pose_opt_delay": 1000,
+    "rotation_reg_weight": 0.01,
+    "translation_reg_weight": 0.001
+  },
+  "noise_config": null,
+  "num_iterations": 10000,
+  "batch_size": 1024,
+  "timestamp": "2025-12-07T20:52:55.752897"
+}

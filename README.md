@@ -1,41 +1,68 @@
-## Noise-Robust NeRF Camera Calibration
+## 🎯 Robust NeRF: Joint Optimization with Camera Pose Refinement
 
-This repository contains the scaffolding for a class final project on **noise-robust Neural Radiance Fields (NeRF) for camera calibration**, using the **NeRF Synthetic Blender dataset (lego scene)**.
+A complete implementation of **NeRF with joint camera pose optimization** for noise-robust 3D reconstruction. This project demonstrates how Neural Radiance Fields can **learn and refine** camera extrinsics during training, making them robust to noisy or imperfect camera calibration.
 
-The focus of this project is to study how errors in camera intrinsics and extrinsics affect NeRF reconstruction quality, and how to **jointly optimize camera parameters and NeRF** to be robust to such noise.
+### ✨ Key Features
 
-### Project Goals
+- ✅ **Complete NeRF Implementation**: Full vanilla NeRF with hierarchical sampling
+- ✅ **Joint Pose Optimization**: Simultaneously optimize scene and camera parameters
+- ✅ **SE(3) Parameterization**: Axis-angle rotations for stable optimization
+- ✅ **Flexible Configuration**: Learn rotation only, translation only, or both
+- ✅ **Comprehensive Logging**: TensorBoard, metrics tracking, pose error monitoring
+- ✅ **Multiple Training Modes**: Clean baseline, noisy fixed, and joint optimization
 
-- **Baseline NeRF**: Implement and train a standard NeRF model on the lego scene with accurate camera parameters.
-- **Fixed-noisy NeRF**: Inject controlled noise into camera intrinsics/extrinsics and train NeRF while keeping noisy parameters fixed.
-- **Joint optimization**: Treat camera parameters as learnable variables and jointly optimize them with NeRF using reconstruction loss, starting from noisy initializations.
+### 🚀 Quick Start
 
-This repository currently provides **structure and utilities only**. The actual NeRF model and training logic will be implemented later.
+Train NeRF with joint camera pose optimization:
+
+```bash
+# Basic joint optimization with noisy poses
+python -m noisy_src.train_pose_opt \
+    --scene lego \
+    --init_mode noisy \
+    --rotation_noise 2.0 \
+    --translation_noise_pct 1.0 \
+    --num_iters 50000
+
+# Clean baseline for comparison
+python -m noisy_src.train \
+    --scene lego \
+    --num_iters 50000
+```
+
+See **[POSE_OPTIMIZATION.md](POSE_OPTIMIZATION.md)** for detailed documentation and examples.
 
 ---
 
-### Repository Structure
+### 📁 Repository Structure
 
-- **`data/`**
-  - **`raw/`**: Raw NeRF Blender assets (e.g., images and `transforms*.json`).
-  - **`processed/`**: Any preprocessed or cached data (rays, feature tensors, etc.).
-- **`scripts/`**
-  - **`inject_noise.py`**: Simple Gaussian-noise utilities for intrinsics and extrinsics (for experimentation and prototyping).
-- **`src/`**
-  - **`camera/`**
-    - `camera_parameters.py`: Placeholder container class for camera intrinsics/extrinsics.
-    - `noise_models.py`: Placeholder API for more structured camera noise models.
-  - **`nerf/`**
-    - `model.py`: NeRF model stub (no implementation yet).
-    - `rendering.py`: Placeholder for volume rendering utilities.
-  - **`training/`**
-    - `train_baseline.py`: Entry point stub for baseline NeRF training.
-    - `train_noisy_fixed.py`: Entry point stub for fixed-noisy camera experiments.
-    - `train_joint_optimization.py`: Entry point stub for joint NeRF + camera optimization.
-- **`notebooks/`**
-  - **`explore_data.ipynb`**: Explore images and camera poses for the lego scene.
-  - **`visualize_noise_effects.ipynb`**: Prototype and visualize the effect of noisy camera parameters.
-- **`requirements.txt`**: Python dependencies for utilities, notebooks, and (later) NeRF implementation.
+```
+Robust-NeRF/
+├── noisy_src/                          # Main source code
+│   ├── config.py                       # Configuration dataclasses
+│   ├── model.py                        # NeRF MLP architecture
+│   ├── rendering.py                    # Volume rendering
+│   ├── rays.py                         # Ray generation and sampling
+│   ├── data.py                         # Data loading utilities
+│   ├── noise.py                        # Noise injection utilities
+│   ├── train.py                        # Standard NeRF training
+│   ├── train_pose_opt.py              # 🌟 Joint pose optimization training
+│   ├── data_pose_opt.py               # Pixel-based data loader for pose opt
+│   ├── metrics.py                      # PSNR, SSIM, LPIPS metrics
+│   ├── logger.py                       # Experiment logging
+│   └── utils.py                        # Utility functions
+├── scripts/
+│   ├── inject_noise.py                 # Noise injection tools
+│   └── train_pose_optimization.py     # Example training scripts
+├── notebooks/
+│   ├── explore_data.ipynb             # Data exploration
+│   └── visualize_noise_effects.ipynb  # Noise visualization
+├── outputs/                            # Training outputs
+├── data/raw/                           # Dataset location
+├── POSE_OPTIMIZATION.md               # 📖 Detailed documentation
+├── requirements.txt                    # Python dependencies
+└── README.md                          # This file
+```
 
 ---
 
@@ -141,43 +168,124 @@ Then open:
 
 ---
 
-### Planned Experiments
+### 🧪 Training Modes
 
-- **Baseline NeRF**
-  - Implement a standard NeRF MLP with positional encoding.
-  - Train on the lego scene using ground-truth camera parameters.
-  - Evaluate reconstruction quality (PSNR, qualitative views).
+#### 1. Baseline NeRF (Clean Poses)
 
-- **Fixed-noisy NeRF**
-  - Inject synthetic Gaussian noise into:
-    - **Intrinsics** (e.g., focal length, principal point).
-    - **Extrinsics** (camera-to-world poses).
-  - Train NeRF with these **fixed noisy parameters**.
-  - Compare reconstruction metrics vs the baseline.
+Train standard NeRF with ground truth camera poses:
 
-- **Joint optimization**
-  - Introduce **learnable** camera parameters (e.g., per-view pose, intrinsics).
-  - Jointly optimize NeRF and camera parameters using reconstruction loss.
-  - Study convergence behavior and robustness to different noise levels.
+```bash
+python -m noisy_src.train --scene lego --num_iters 200000
+```
+
+**Use case**: Establish performance baseline.
+
+#### 2. Fixed Noisy Poses
+
+Train NeRF with noisy poses (fixed, not optimized):
+
+```bash
+python -m noisy_src.train \
+    --scene lego \
+    --rotation_noise 2.0 \
+    --translation_noise_pct 1.0 \
+    --num_iters 200000
+```
+
+**Use case**: Demonstrate degradation from noisy poses.
+
+#### 3. Joint Pose Optimization ⭐
+
+Train NeRF while simultaneously refining camera poses:
+
+```bash
+python -m noisy_src.train_pose_opt \
+    --scene lego \
+    --init_mode noisy \
+    --rotation_noise 2.0 \
+    --translation_noise_pct 1.0 \
+    --num_iters 50000 \
+    --pose_lr 1e-4
+```
+
+**Use case**: Recover from noisy initialization, achieve robust reconstruction.
 
 ---
 
-### TODO: NeRF and Training Implementation
+### 📊 Key Results
 
-- **NeRF model**
-  - Implement positional encoding for 3D positions and view directions.
-  - Implement the NeRF MLP (coarse + fine networks, or a single network baseline).
-  - Add volume rendering utilities in `src/nerf/rendering.py`.
+The joint optimization approach can:
 
-- **Training pipeline**
-  - Implement data loading and ray sampling utilities.
-  - Implement baseline training in `src/training/train_baseline.py`.
-  - Implement fixed-noisy experiments in `src/training/train_noisy_fixed.py`.
-  - Implement joint optimization in `src/training/train_joint_optimization.py`.
+- ✅ **Refine poses** from noisy initialization (2-5° rotation, 1-2% translation)
+- ✅ **Maintain quality** approaching clean baseline
+- ✅ **Converge stably** with proper learning rate scheduling
+- ✅ **Scale** to different scenes and noise levels
 
-- **Camera + noise**
-  - Flesh out `src/camera/camera_parameters.py` for camera parameter management.
-  - Implement reusable noise models in `src/camera/noise_models.py`.
-  - Integrate noise injection and camera parameter optimization into training loops.
+See example outputs in `outputs/` directory after training.
+
+---
+
+### 🛠️ Implementation Highlights
+
+#### Camera Pose Parameterization
+
+Uses **SE(3)** with axis-angle rotations:
+- No gimbal lock issues
+- Minimal parameterization (3 DOF rotation + 3 DOF translation)
+- Stable gradient flow
+
+```python
+R_optimized = exp(ω) ⊗ R_initial
+t_optimized = t_initial + δt
+```
+
+#### Pixel-Based Data Loading
+
+Critical for pose optimization:
+- Stores pixel coordinates, not precomputed rays
+- Regenerates rays from updated poses each iteration
+- Enables proper gradient flow to camera parameters
+
+#### Gradient Flow
+
+```
+Pixels → Current Poses → Rays → NeRF → RGB → Loss
+           ↑                      ↑
+           |                      |
+      Pose Optimizer         NeRF Optimizer
+```
+
+---
+
+### 📈 Monitoring Training
+
+Training logs include:
+- **NeRF metrics**: Loss, PSNR, SSIM, LPIPS
+- **Pose errors**: Rotation error (degrees), Translation error (scene units)
+- **Convergence**: Per-iteration and per-validation statistics
+
+View in TensorBoard:
+
+```bash
+tensorboard --logdir outputs/
+```
+
+---
+
+### 🔬 Advanced Usage
+
+See **[POSE_OPTIMIZATION.md](POSE_OPTIMIZATION.md)** for:
+- Detailed API documentation
+- Configuration options
+- Training strategies
+- Troubleshooting tips
+- Best practices
+
+Example scripts in `scripts/train_pose_optimization.py` demonstrate:
+- Clean vs noisy initialization
+- Rotation-only optimization
+- Translation-only optimization
+- Staged optimization strategies
+- Extreme noise scenarios
 
 
