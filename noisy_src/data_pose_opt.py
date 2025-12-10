@@ -243,3 +243,5 @@ def create_pixel_dataset(data: BlenderData) -> Tuple[PixelDataset, PixelSampler]
     sampler = PixelSampler(dataset, batch_size=1024)
     return dataset, sampler
 
+
+

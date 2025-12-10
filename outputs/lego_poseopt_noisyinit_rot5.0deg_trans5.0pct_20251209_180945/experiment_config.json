@@ -1,0 +1,23 @@
+{
+  "scene": "lego",
+  "experiment_name": "lego_poseopt_noisyinit_rot5.0deg_trans5.0pct_20251209_180945",
+  "init_mode": "noisy",
+  "pose_optimization": {
+    "learn_rotation": true,
+    "learn_translation": true,
+    "pose_lr": 0.0001,
+    "pose_opt_delay": 1000,
+    "rotation_reg_weight": 0.01,
+    "translation_reg_weight": 0.001
+  },
+  "noise_config": {
+    "rotation_noise_deg": 5.0,
+    "translation_noise": 0.0,
+    "translation_noise_pct": 5.0,
+    "seed": null,
+    "has_noise": true
+  },
+  "num_iterations": 10000,
+  "batch_size": 1024,
+  "timestamp": "2025-12-09T18:09:52.341271"
+}
