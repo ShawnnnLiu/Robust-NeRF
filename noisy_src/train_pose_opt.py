@@ -881,7 +881,23 @@ def train_with_pose_optimization(
         
         batch_time = time.time() - batch_start
         
-        # Logging
+        # Calculate throughput
+        rays_per_sec = config.data.batch_size / batch_time
+        
+        # Create and log training metrics
+        train_metrics = TrainingMetrics(
+            iteration=iteration,
+            loss=metrics["loss"],
+            loss_coarse=metrics["loss_coarse"],
+            loss_fine=metrics.get("loss_fine"),
+            psnr=metrics["psnr"],
+            learning_rate=optimizer_nerf.param_groups[0]["lr"],
+            time_per_iter=batch_time,
+            rays_per_sec=rays_per_sec,
+        )
+        logger.log_training(train_metrics)
+        
+        # Console logging
         if iteration % config.train.log_every == 0:
             elapsed = time.time() - start_time
             

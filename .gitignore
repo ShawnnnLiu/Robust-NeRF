@@ -20,7 +20,7 @@ pip-wheel-metadata/
 
 # Logs
 *.log
-logs/
+# logs/  # Commented out to track training metrics CSV files
 
 # Jupyter
 .ipynb_checkpoints/

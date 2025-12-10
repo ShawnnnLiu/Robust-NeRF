@@ -1,0 +1,9 @@
+results.json did not save
+
+Final Pose Refinement:
+  Rotation error:    3.786° ± 2.879° (max: 13.314°)
+  Translation error: 0.2797 ± 0.1249 (max: 0.5900)
+
+Final Rendering Quality:
+  PSNR:  11.98 dB
+  SSIM:  0.6342
